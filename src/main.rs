@@ -11,6 +11,13 @@ pub enum Messages {
     MoveMade(u8)
 }
 
+#[derive(Debug, Clone, Copy)]
+enum SpotState {
+    Empty,
+    X,
+    O
+}
+
 struct Game {
     moves: Vec<u8>,
 }
@@ -20,6 +27,19 @@ impl Game {
         Game {
             moves: Vec::new(),
         }
+    }
+    fn spots(&self) -> [SpotState; 9] {
+        let mut spots = [SpotState::Empty; 9];
+        let mut x = true;
+        for n in &self.moves {
+            if x {
+                spots[*n as usize] = SpotState::X;
+            } else {
+                spots[*n as usize] = SpotState::O;
+            }
+            x = !x;
+        }
+        spots
     }
 }
 
