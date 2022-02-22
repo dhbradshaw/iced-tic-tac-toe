@@ -55,6 +55,14 @@ impl Game {
         }
         spots
     }
+
+    fn current_player(&self) -> SpotType {
+        if self.moves.len() % 2 == 0 {
+            SpotType::X
+        } else {
+            SpotType::O
+        }
+    }
 }
 
 impl Application for Game {
@@ -82,6 +90,8 @@ impl Application for Game {
     }
 
     fn view(&mut self) -> Element<Self::Message> {
+        let current_player = Text::new(self.current_player().to_char());
+
         let spots = self.spots();
         let mut spot_elements = Vec::new();
         for (i, state) in self.button_states.iter_mut().enumerate() {
@@ -90,7 +100,6 @@ impl Application for Game {
                 .on_press(Message::MoveMade(i as u8));
             spot_elements.push(spot_element);
         }
-
         spot_elements.reverse();
         let row_0 = Row::new()
         .padding(10)
@@ -113,6 +122,7 @@ impl Application for Game {
         let column = Column::new()
         .padding(10)
         .spacing(10)
+        .push(current_player)
         .push(row_0)
         .push(row_1)
         .push(row_2);
