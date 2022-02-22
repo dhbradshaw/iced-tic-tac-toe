@@ -104,7 +104,8 @@ impl Application for Game {
                 .height(Length::Fill)
                 .width(Length::Fill)
                 .horizontal_alignment(iced::HorizontalAlignment::Center)
-                .vertical_alignment(iced::VerticalAlignment::Center);
+                .vertical_alignment(iced::VerticalAlignment::Center)
+                .size(40);
             let spot_element = Button::new(state, text)
                 .on_press(Message::MoveMade(i as u8))
                 .height(Length::Units(50))
