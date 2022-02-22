@@ -141,15 +141,22 @@ impl Application for Game {
         let current_player = Text::new(self.current_player().to_char());
 
         let spots = self.spots();
+        let winning_squares = self.winning_squares();
         let mut spot_elements = Vec::new();
         for (i, state) in self.button_states.iter_mut().enumerate() {
             let spot_type = spots[i].to_char();
+            let size;
+            if winning_squares.contains(&(i as u8)) {
+                size = 90;
+            } else {
+                size = 80;
+            };
             let text = Text::new(spot_type)
                 .height(Length::Fill)
                 .width(Length::Fill)
                 .horizontal_alignment(iced::HorizontalAlignment::Center)
                 .vertical_alignment(iced::VerticalAlignment::Center)
-                .size(80);
+                .size(size);
             let spot_element = Button::new(state, text)
                 .on_press(Message::MoveMade(i as u8))
                 .height(Length::Units(100))
