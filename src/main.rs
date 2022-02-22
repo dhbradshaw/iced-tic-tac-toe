@@ -8,7 +8,7 @@ pub fn main() -> iced::Result {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub enum Messages {
+pub enum Message {
     MoveMade(u8)
 }
 
@@ -31,14 +31,15 @@ impl SpotType {
 
 struct Game {
     moves: Vec<u8>,
+    button_states: [button::State; 9],
 
 }
 
 impl Game {
     fn new() -> Self {
         Game {
-            moves: vec![0,1,2,3,4,5,6,7,8],
-
+            moves: vec![],
+            button_states: [button::State::new(); 9]
         }
     }
     pub fn spots(&self) -> [SpotType; 9] {
@@ -58,7 +59,7 @@ impl Game {
 
 impl Application for Game {
     type Executor = executor::Default;
-    type Message = Messages;
+    type Message = Message;
     type Flags = ();
 
     fn new(_flags: ()) -> (Game, Command<Self::Message>) {
@@ -71,7 +72,7 @@ impl Application for Game {
 
     fn update(&mut self, _message: Self::Message, _clipboard: &mut Clipboard) -> Command<Self::Message> {
         match _message {
-            Messages::MoveMade(move_) => {
+            Message::MoveMade(move_) => {
                 if self.moves.contains(&move_) {
                     self.moves.push(move_);
                 }
@@ -83,14 +84,13 @@ impl Application for Game {
     fn view(&mut self) -> Element<Self::Message> {
         let spots = self.spots();
         let mut spot_elements = Vec::new();
-        for (i, spot) in spots.iter().enumerate() {
-            let spot_type = spot.to_char();
-            let spot_element = Text::new(format!("{spot_type} {i}"))
-                .size(50)
-                .horizontal_alignment(iced::HorizontalAlignment::Center)
-                .vertical_alignment(iced::VerticalAlignment::Center);
+        for (i, state) in self.button_states.iter_mut().enumerate() {
+            let spot_type = spots[i].to_char();
+            let spot_element = Button::new(state, Text::new(spot_type))
+                .on_press(Message::MoveMade(i as u8));
             spot_elements.push(spot_element);
         }
+
         spot_elements.reverse();
         let row_0 = Row::new()
         .padding(10)
