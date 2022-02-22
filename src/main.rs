@@ -2,7 +2,9 @@ use iced::button;
 use iced::Column;
 use iced::Length;
 use iced::Row;
+use iced::button::Style;
 use iced::{executor, Application, Button, Clipboard, Command, Element, Settings, Text};
+use iced::Background;
 
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
@@ -13,7 +15,7 @@ pub enum Message {
     MoveMade(u8),
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 enum SpotType {
     Empty,
     X,
@@ -62,6 +64,48 @@ impl Game {
         } else {
             SpotType::O
         }
+    }
+
+    fn winning_lines(&self) -> Vec<[u8; 3]> {
+        let possible_wins = [
+            // horizontals
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+
+            // verticals
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+
+            // diagonals
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+        let spots = self.spots();
+
+        let mut wins = vec![];
+        for win in possible_wins {
+            let values = win.iter().map(|n| spots[*n as usize]).collect::<Vec<_>>();
+            if values.iter().all(|v| *v == SpotType::X) {
+                wins.push(win);
+            } else if values.iter().all(|v| *v == SpotType::O) {
+                wins.push(win);
+            }
+        }
+        wins
+    }
+
+    fn winning_squares(&self) -> Vec<u8> {
+        let mut squares = vec![];
+        for win in self.winning_lines() {
+            for n in win {
+                if !squares.contains(&n) {
+                    squares.push(n);
+                }
+            }
+        }
+        squares
     }
 }
 
