@@ -133,7 +133,11 @@ impl Application for Game {
         match _message {
             Message::MoveMade(move_) => {
                 if !self.moves.contains(&move_) {
-                    self.moves.push(move_);
+                    if self.winning_lines().is_empty() {
+                        self.moves.push(move_);
+                    } else {
+                        self.moves.clear();
+                    }
                 }
             }
         };
@@ -142,11 +146,15 @@ impl Application for Game {
 
     fn view(&mut self) -> Element<Self::Message> {
         let winning_squares = self.winning_squares();
-        let current_player = if winning_squares.is_empty() {
-            Text::new(format!("{} next",self.current_player().to_char()))
+        let message = if winning_squares.is_empty() {
+            format!("{} next", self.current_player().to_char())
         } else {
-            Text::new(format!("{} wins!", if self.moves.len() % 2 == 0 {"O"} else {"X"}))
+            format!(
+                "{} wins!",
+                if self.moves.len() % 2 == 0 { "O" } else { "X" }
+            )
         };
+        let current_player = Text::new(message).size(70);
 
         let spots = self.spots();
         let mut spot_elements = Vec::new();
