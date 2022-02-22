@@ -105,39 +105,44 @@ impl Application for Game {
                 .width(Length::Fill)
                 .horizontal_alignment(iced::HorizontalAlignment::Center)
                 .vertical_alignment(iced::VerticalAlignment::Center)
-                .size(40);
+                .size(80);
             let spot_element = Button::new(state, text)
                 .on_press(Message::MoveMade(i as u8))
-                .height(Length::Units(50))
-                .width(Length::Units(50));
+                .height(Length::Units(100))
+                .width(Length::Units(100));
             spot_elements.push(spot_element);
         }
         spot_elements.reverse();
+
         let row_0 = Row::new()
             .padding(10)
             .spacing(10)
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap());
+
         let row_1 = Row::new()
             .padding(10)
             .spacing(10)
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap());
+
         let row_2 = Row::new()
             .padding(10)
             .spacing(10)
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap());
+
         let column = Column::new()
-            .padding(10)
-            .spacing(10)
+            .padding(0)
+            .spacing(0)
             .push(current_player)
             .push(row_0)
             .push(row_1)
             .push(row_2);
+
         column.into()
     }
 }
