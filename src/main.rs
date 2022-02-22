@@ -3,18 +3,33 @@ use iced::Column;
 use iced::Row;
 
 pub fn main() -> iced::Result {
-    Hello::run(Settings::default())
+    Game::run(Settings::default())
 }
 
-struct Hello;
+#[derive(Debug, Clone, Copy)]
+pub enum Messages {
+    MoveMade(u8)
+}
 
-impl Application for Hello {
+struct Game {
+    moves: Vec<u8>,
+}
+
+impl Game {
+    fn new() -> Self {
+        Game {
+            moves: Vec::new(),
+        }
+    }
+}
+
+impl Application for Game {
     type Executor = executor::Default;
-    type Message = ();
+    type Message = Messages;
     type Flags = ();
 
-    fn new(_flags: ()) -> (Hello, Command<Self::Message>) {
-        (Hello, Command::none())
+    fn new(_flags: ()) -> (Game, Command<Self::Message>) {
+        (Game::new(), Command::none())
     }
 
     fn title(&self) -> String {
@@ -22,6 +37,11 @@ impl Application for Hello {
     }
 
     fn update(&mut self, _message: Self::Message, _clipboard: &mut Clipboard) -> Command<Self::Message> {
+        match _message {
+            Messages::MoveMade(move_) => {
+                self.moves.push(move_);
+            }
+        };
         Command::none()
     }
 
