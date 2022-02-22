@@ -59,7 +59,9 @@ impl Application for Game {
     fn update(&mut self, _message: Self::Message, _clipboard: &mut Clipboard) -> Command<Self::Message> {
         match _message {
             Messages::MoveMade(move_) => {
-                self.moves.push(move_);
+                if self.moves.contains(&move_) {
+                    self.moves.push(move_);
+                }
             }
         };
         Command::none()
