@@ -1,10 +1,15 @@
 use iced::button;
+use iced::executor;
+use iced::Application;
+use iced::Button;
+use iced::Clipboard;
 use iced::Column;
+use iced::Command;
+use iced::Element;
 use iced::Length;
 use iced::Row;
-use iced::button::Style;
-use iced::{executor, Application, Button, Clipboard, Command, Element, Settings, Text};
-use iced::Background;
+use iced::Settings;
+use iced::Text;
 
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
@@ -72,12 +77,10 @@ impl Game {
             [0, 1, 2],
             [3, 4, 5],
             [6, 7, 8],
-
             // verticals
             [0, 3, 6],
             [1, 4, 7],
             [2, 5, 8],
-
             // diagonals
             [0, 4, 8],
             [2, 4, 6],
