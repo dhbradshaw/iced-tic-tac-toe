@@ -23,7 +23,7 @@ enum SpotType {
 impl SpotType {
     fn to_char(&self) -> char {
         match self {
-            SpotType::Empty => '-',
+            SpotType::Empty => ' ',
             SpotType::X => 'X',
             SpotType::O => 'O',
         }
