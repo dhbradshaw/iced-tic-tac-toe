@@ -141,10 +141,14 @@ impl Application for Game {
     }
 
     fn view(&mut self) -> Element<Self::Message> {
-        let current_player = Text::new(self.current_player().to_char());
+        let winning_squares = self.winning_squares();
+        let current_player = if winning_squares.is_empty() {
+            Text::new(format!("{} next",self.current_player().to_char()))
+        } else {
+            Text::new(format!("{} wins!", if self.moves.len() % 2 == 0 {"O"} else {"X"}))
+        };
 
         let spots = self.spots();
-        let winning_squares = self.winning_squares();
         let mut spot_elements = Vec::new();
         for (i, state) in self.button_states.iter_mut().enumerate() {
             let spot_type = spots[i].to_char();
