@@ -174,29 +174,35 @@ impl Application for Game {
                 .size(size);
             let spot_element = Button::new(state, text)
                 .on_press(Message::MoveMade(i as u8))
+                .padding(10)
                 .height(Length::Units(100))
                 .width(Length::Units(100));
             spot_elements.push(spot_element);
         }
         spot_elements.reverse();
 
+        // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
+        let row_padding = 5;
+        // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
+        let row_spacing = 2 * row_padding;
+
         let row_0 = Row::new()
-            .padding(10)
-            .spacing(10)
+            .padding(row_padding)
+            .spacing(row_spacing)
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap());
 
         let row_1 = Row::new()
-            .padding(10)
-            .spacing(10)
+            .padding(row_padding)
+            .spacing(row_spacing)
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap());
 
         let row_2 = Row::new()
-            .padding(10)
-            .spacing(10)
+            .padding(row_padding)
+            .spacing(row_spacing)
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap())
             .push(spot_elements.pop().unwrap());
@@ -204,10 +210,10 @@ impl Application for Game {
         let column = Column::new()
             .padding(0)
             .spacing(0)
-            .push(current_player)
             .push(row_0)
             .push(row_1)
-            .push(row_2);
+            .push(row_2)
+            .push(current_player);
 
         column.into()
     }
