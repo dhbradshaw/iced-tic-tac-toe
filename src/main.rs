@@ -38,6 +38,20 @@ impl SpotType {
     }
 }
 
+struct ButtonColor {
+    color: iced::Color,
+}
+
+impl button::StyleSheet for ButtonColor {
+    fn active(&self) -> button::Style {
+        button::Style {
+            background: Some(iced::Background::Color(self.color)),
+            ..Default::default()
+        }
+    }
+    // other methods in Stylesheet have a default impl
+}
+
 struct Game {
     moves: Vec<u8>,
     button_states: [button::State; 9],
@@ -162,10 +176,13 @@ impl Application for Game {
         for (i, state) in self.button_states.iter_mut().enumerate() {
             let spot_type = spots[i].to_char();
             let size;
+            let color;
             if winning_squares.contains(&(i as u8)) {
                 size = 90;
+                color = iced::Color::from_rgb(0.5, 0.5, 0.5);
             } else {
                 size = 80;
+                color = iced::Color::from_rgb(0.8, 0.8, 0.8);
             };
             let text = Text::new(spot_type)
                 .height(Length::Fill)
@@ -174,6 +191,7 @@ impl Application for Game {
                 .vertical_alignment(iced::VerticalAlignment::Center)
                 .size(size);
             let spot_element = Button::new(state, text)
+                .style(ButtonColor { color })
                 .on_press(Message::MoveMade(i as u8))
                 .padding(10)
                 .height(Length::Units(100))
