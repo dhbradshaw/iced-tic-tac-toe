@@ -188,43 +188,52 @@ impl Application for Game {
         }
         spot_elements.reverse();
 
-        // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
-        let row_padding = 5;
-        // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
-        let row_spacing = 2 * row_padding;
-
-        let row_0 = Row::new()
-            .padding(row_padding)
-            .spacing(row_spacing)
-            .push(spot_elements.pop().unwrap())
-            .push(spot_elements.pop().unwrap())
-            .push(spot_elements.pop().unwrap());
-
-        let row_1 = Row::new()
-            .padding(row_padding)
-            .spacing(row_spacing)
-            .push(spot_elements.pop().unwrap())
-            .push(spot_elements.pop().unwrap())
-            .push(spot_elements.pop().unwrap());
-
-        let row_2 = Row::new()
-            .padding(row_padding)
-            .spacing(row_spacing)
-            .push(spot_elements.pop().unwrap())
-            .push(spot_elements.pop().unwrap())
-            .push(spot_elements.pop().unwrap());
+        let r_0 = row(
+            spot_elements.pop().unwrap(),
+            spot_elements.pop().unwrap(),
+            spot_elements.pop().unwrap(),
+        );
+        let r_1 = row(
+            spot_elements.pop().unwrap(),
+            spot_elements.pop().unwrap(),
+            spot_elements.pop().unwrap(),
+        );
+        let r_2 = row(
+            spot_elements.pop().unwrap(),
+            spot_elements.pop().unwrap(),
+            spot_elements.pop().unwrap(),
+        );
 
         let column = Column::new()
             .padding(0)
             .spacing(0)
             .align_items(Align::Center)
-            .push(row_0)
-            .push(row_1)
-            .push(row_2)
+            .push(r_0)
+            .push(r_1)
+            .push(r_2)
             .push(current_player);
 
+        let column = column.push(Text::new("").size(0));
         column.into()
     }
+}
+
+fn row<'a>(
+    e0: Button<'a, Message>,
+    e1: Button<'a, Message>,
+    e2: Button<'a, Message>,
+) -> Row<'a, Message> {
+    // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
+    let row_padding = 5;
+    // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
+    let row_spacing = 2 * row_padding;
+
+    Row::new()
+        .padding(row_padding)
+        .spacing(row_spacing)
+        .push(e0)
+        .push(e1)
+        .push(e2)
 }
 
 fn spot_element(
