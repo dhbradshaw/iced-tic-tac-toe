@@ -183,28 +183,8 @@ impl Application for Game {
         let mut spot_elements = Vec::new();
         for (i, state) in self.button_states.iter_mut().enumerate() {
             let spot_type = spots[i].to_char();
-            let size;
-            let color;
-            if winning_squares.contains(&(i as u8)) {
-                size = 90;
-                color = iced::Color::from_rgb(0.5, 0.5, 0.5);
-            } else {
-                size = 80;
-                color = iced::Color::from_rgb(0.8, 0.8, 0.8);
-            };
-            let text = Text::new(spot_type)
-                .height(Length::Fill)
-                .width(Length::Fill)
-                .horizontal_alignment(iced::HorizontalAlignment::Center)
-                .vertical_alignment(iced::VerticalAlignment::Center)
-                .size(size);
-            let spot_element = Button::new(state, text)
-                .style(ButtonColor { color })
-                .on_press(Message::MoveMade(i as u8))
-                .padding(10)
-                .height(Length::Units(100))
-                .width(Length::Units(100));
-            spot_elements.push(spot_element);
+            let winning = winning_squares.contains(&(i as u8));
+            spot_elements.push(spot_element(state, spot_type.to_string(), i as u8, winning));
         }
         spot_elements.reverse();
 
@@ -245,4 +225,35 @@ impl Application for Game {
 
         column.into()
     }
+}
+
+fn spot_element(
+    state: &mut button::State,
+    text: String,
+    index: u8,
+    winner: bool,
+) -> Button<Message> {
+    let size;
+    let color;
+    if winner {
+        size = 90;
+        color = iced::Color::from_rgb(0.5, 0.5, 0.5);
+    } else {
+        size = 80;
+        color = iced::Color::from_rgb(0.8, 0.8, 0.8);
+    };
+
+    let text = Text::new(text)
+        .height(Length::Fill)
+        .width(Length::Fill)
+        .horizontal_alignment(iced::HorizontalAlignment::Center)
+        .vertical_alignment(iced::VerticalAlignment::Center)
+        .size(size);
+
+    Button::new(state, text)
+        .style(ButtonColor { color })
+        .on_press(Message::MoveMade(index))
+        .padding(10)
+        .height(Length::Units(100))
+        .width(Length::Units(100))
 }
