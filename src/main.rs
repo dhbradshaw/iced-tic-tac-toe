@@ -182,9 +182,9 @@ impl Application for Game {
         let spots = self.spots();
         let mut spot_elements = Vec::new();
         for (i, state) in self.button_states.iter_mut().enumerate() {
-            let spot_type = spots[i].to_char();
+            let spot_type = spots[i];
             let winning = winning_squares.contains(&(i as u8));
-            spot_elements.push(spot_element(state, spot_type.to_string(), i as u8, winning));
+            spot_elements.push(spot_element(state, spot_type, i as u8, winning));
         }
         spot_elements.reverse();
 
@@ -229,7 +229,7 @@ impl Application for Game {
 
 fn spot_element(
     state: &mut button::State,
-    text: String,
+    spot_type: SpotType,
     index: u8,
     winner: bool,
 ) -> Button<Message> {
@@ -243,7 +243,7 @@ fn spot_element(
         color = iced::Color::from_rgb(0.8, 0.8, 0.8);
     };
 
-    let text = Text::new(text)
+    let text = Text::new(spot_type.to_char().to_string())
         .height(Length::Fill)
         .width(Length::Fill)
         .horizontal_alignment(iced::HorizontalAlignment::Center)
