@@ -188,32 +188,32 @@ impl Application for Game {
         }
         spot_elements.reverse();
 
-        let r_0 = row(
-            spot_elements.pop().unwrap(),
-            spot_elements.pop().unwrap(),
-            spot_elements.pop().unwrap(),
-        );
-        let r_1 = row(
-            spot_elements.pop().unwrap(),
-            spot_elements.pop().unwrap(),
-            spot_elements.pop().unwrap(),
-        );
-        let r_2 = row(
-            spot_elements.pop().unwrap(),
-            spot_elements.pop().unwrap(),
-            spot_elements.pop().unwrap(),
-        );
+        let rows = [
+            row(
+                spot_elements.pop().unwrap(),
+                spot_elements.pop().unwrap(),
+                spot_elements.pop().unwrap(),
+            ),
+            row(
+                spot_elements.pop().unwrap(),
+                spot_elements.pop().unwrap(),
+                spot_elements.pop().unwrap(),
+            ),
+            row(
+                spot_elements.pop().unwrap(),
+                spot_elements.pop().unwrap(),
+                spot_elements.pop().unwrap(),
+            ),
+        ];
 
-        let column = Column::new()
+        let mut column = Column::new()
             .padding(0)
             .spacing(0)
-            .align_items(Align::Center)
-            .push(r_0)
-            .push(r_1)
-            .push(r_2)
-            .push(current_player);
-
-        let column = column.push(Text::new("").size(0));
+            .align_items(Align::Center);
+        for row in rows.into_iter() {
+            column = column.push(row);
+        }
+        column = column.push(current_player);
         column.into()
     }
 }
