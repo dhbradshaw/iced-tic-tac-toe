@@ -1,5 +1,6 @@
 use iced::button;
 use iced::executor;
+use iced::Align;
 use iced::Application;
 use iced::Button;
 use iced::Clipboard;
@@ -210,6 +211,7 @@ impl Application for Game {
         let column = Column::new()
             .padding(0)
             .spacing(0)
+            .align_items(Align::Center)
             .push(row_0)
             .push(row_1)
             .push(row_2)
