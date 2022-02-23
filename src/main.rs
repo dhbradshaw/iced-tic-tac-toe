@@ -147,12 +147,12 @@ impl Application for Game {
     ) -> Command<Self::Message> {
         match _message {
             Message::MoveMade(move_) => {
-                if !self.moves.contains(&move_) {
-                    if self.winning_lines().is_empty() {
+                if self.winning_lines().is_empty() {
+                    if !self.moves.contains(&move_) {
                         self.moves.push(move_);
-                    } else {
-                        self.moves.clear();
                     }
+                } else {
+                    self.moves.clear();
                 }
             }
         };
