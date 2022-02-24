@@ -11,7 +11,7 @@ use iced::Length;
 use iced::Row;
 use iced::Settings;
 use iced::Text;
-use iced_tic_tac_toe::shape;
+use iced_tic_tac_toe::shape_2D;
 
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
@@ -180,6 +180,7 @@ impl Application for Game {
         };
         let current_player = Text::new(message).size(70);
 
+        // Get 2D array of buttons
         let spots = self.spots();
         let mut spot_elements = Vec::new();
         for (i, state) in self.button_states.iter_mut().enumerate() {
@@ -187,9 +188,9 @@ impl Application for Game {
             let winning = winning_squares.contains(&(i as u8));
             spot_elements.push(spot_element(state, spot_type, i as u8, winning));
         }
-        let spot_elements = shape(spot_elements, 3);
-        let rows = spot_elements.into_iter().map(|e| row(e));
+        let spot_elements = shape_2D(spot_elements, 3);
 
+        let rows = spot_elements.into_iter().map(|e| row(e));
         let mut column = Column::new()
             .padding(0)
             .spacing(0)
