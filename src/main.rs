@@ -11,7 +11,7 @@ use iced::Length;
 use iced::Row;
 use iced::Settings;
 use iced::Text;
-use iced_tic_tac_toe::shape_2D;
+use iced_tic_tac_toe::shape_2d;
 
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
@@ -170,6 +170,8 @@ impl Application for Game {
 
     fn view(&mut self) -> Element<Self::Message> {
         let winning_squares = self.winning_squares();
+
+        // Create the current player message.
         let message = if winning_squares.is_empty() {
             format!("{} next", self.current_player().to_char())
         } else {
@@ -188,8 +190,9 @@ impl Application for Game {
             let winning = winning_squares.contains(&(i as u8));
             spot_elements.push(spot_element(state, spot_type, i as u8, winning));
         }
-        let spot_elements = shape_2D(spot_elements, 3);
+        let spot_elements = shape_2d(spot_elements, 3);
 
+        // Convert 2D array of buttons to a column of rows.
         let rows = spot_elements.into_iter().map(|e| row(e));
         let mut column = Column::new()
             .padding(0)
@@ -198,7 +201,10 @@ impl Application for Game {
         for row in rows.into_iter() {
             column = column.push(row);
         }
+
+        // Add the current player message to the bottom of the column
         column = column.push(current_player);
+
         column.into()
     }
 }
