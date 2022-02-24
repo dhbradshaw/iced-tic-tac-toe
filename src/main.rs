@@ -11,6 +11,7 @@ use iced::Length;
 use iced::Row;
 use iced::Settings;
 use iced::Text;
+use iced_tic_tac_toe::shape;
 
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
@@ -186,25 +187,8 @@ impl Application for Game {
             let winning = winning_squares.contains(&(i as u8));
             spot_elements.push(spot_element(state, spot_type, i as u8, winning));
         }
-        spot_elements.reverse();
-
-        let rows = [
-            row(vec![
-                spot_elements.pop().unwrap(),
-                spot_elements.pop().unwrap(),
-                spot_elements.pop().unwrap(),
-            ]),
-            row(vec![
-                spot_elements.pop().unwrap(),
-                spot_elements.pop().unwrap(),
-                spot_elements.pop().unwrap(),
-            ]),
-            row(vec![
-                spot_elements.pop().unwrap(),
-                spot_elements.pop().unwrap(),
-                spot_elements.pop().unwrap(),
-            ]),
-        ];
+        let spot_elements = shape(spot_elements, 3);
+        let rows = spot_elements.into_iter().map(|e| row(e));
 
         let mut column = Column::new()
             .padding(0)
