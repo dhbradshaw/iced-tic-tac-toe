@@ -189,17 +189,17 @@ impl Application for Game {
         spot_elements.reverse();
 
         let rows = [
-            row([
+            row(vec![
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
             ]),
-            row([
+            row(vec![
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
             ]),
-            row([
+            row(vec![
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
@@ -218,7 +218,7 @@ impl Application for Game {
     }
 }
 
-fn row<'a>(buttons: [Button<'a, Message>; 3]) -> Row<'a, Message> {
+fn row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
     // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
     let row_padding = 5;
     // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
