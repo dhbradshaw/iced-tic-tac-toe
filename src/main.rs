@@ -189,21 +189,21 @@ impl Application for Game {
         spot_elements.reverse();
 
         let rows = [
-            row(
+            row([
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
-            ),
-            row(
+            ]),
+            row([
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
-            ),
-            row(
+            ]),
+            row([
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
                 spot_elements.pop().unwrap(),
-            ),
+            ]),
         ];
 
         let mut column = Column::new()
@@ -218,22 +218,18 @@ impl Application for Game {
     }
 }
 
-fn row<'a>(
-    e0: Button<'a, Message>,
-    e1: Button<'a, Message>,
-    e2: Button<'a, Message>,
-) -> Row<'a, Message> {
+fn row<'a>(buttons: [Button<'a, Message>; 3]) -> Row<'a, Message> {
     // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
     let row_padding = 5;
     // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
     let row_spacing = 2 * row_padding;
 
-    Row::new()
-        .padding(row_padding)
-        .spacing(row_spacing)
-        .push(e0)
-        .push(e1)
-        .push(e2)
+    let mut row = Row::new().padding(row_padding).spacing(row_spacing);
+
+    for button in buttons.into_iter() {
+        row = row.push(button);
+    }
+    row.into()
 }
 
 fn spot_element(
