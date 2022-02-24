@@ -20,6 +20,7 @@ pub fn main() -> iced::Result {
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
     MoveMade(u8),
+    Undo,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -55,14 +56,18 @@ impl button::StyleSheet for ButtonColor {
 
 struct Game {
     moves: Vec<u8>,
-    button_states: [button::State; 9],
+
+    // local state
+    cell_button_states: [button::State; 9],
+    undo_button_state: button::State,
 }
 
 impl Game {
     fn new() -> Self {
         Game {
             moves: vec![],
-            button_states: [button::State::new(); 9],
+            cell_button_states: [button::State::new(); 9],
+            undo_button_state: button::State::new(),
         }
     }
     pub fn spots(&self) -> [SpotType; 9] {
@@ -164,6 +169,9 @@ impl Application for Game {
                     }
                 }
             }
+            Message::Undo => {
+                self.moves.pop();
+            }
         };
         Command::none()
     }
@@ -185,7 +193,7 @@ impl Application for Game {
         // Get 2D array of buttons
         let spots = self.spots();
         let mut spot_elements = Vec::new();
-        for (i, state) in self.button_states.iter_mut().enumerate() {
+        for (i, state) in self.cell_button_states.iter_mut().enumerate() {
             let spot_type = spots[i];
             let winning = winning_squares.contains(&(i as u8));
             spot_elements.push(spot_element(state, spot_type, i as u8, winning));
@@ -202,8 +210,13 @@ impl Application for Game {
             column = column.push(row);
         }
 
+        // Create the undo button.
+        let undo_button = Button::new(&mut self.undo_button_state, Text::new("Undo").size(70))
+            .on_press(Message::Undo);
+
         // Add the current player message to the bottom of the column
         column = column.push(current_player);
+        column = column.push(undo_button);
 
         column.into()
     }
