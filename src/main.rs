@@ -20,6 +20,7 @@ pub fn main() -> iced::Result {
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
     MoveMade(u8),
+    Reset,
     Undo,
 }
 
@@ -59,6 +60,7 @@ struct Game {
 
     // local state
     cell_button_states: [button::State; 9],
+    reset_button_state: button::State,
     undo_button_state: button::State,
 }
 
@@ -67,6 +69,7 @@ impl Game {
         Game {
             moves: vec![],
             cell_button_states: [button::State::new(); 9],
+            reset_button_state: button::State::new(),
             undo_button_state: button::State::new(),
         }
     }
@@ -172,6 +175,9 @@ impl Application for Game {
             Message::Undo => {
                 self.moves.pop();
             }
+            Message::Reset => {
+                self.moves.clear();
+            }
         };
         Command::none()
     }
@@ -210,6 +216,10 @@ impl Application for Game {
             column = column.push(row);
         }
 
+        // Create the reset button.
+        let reset_button = Button::new(&mut self.reset_button_state, Text::new("Reset").size(70))
+            .on_press(Message::Reset);
+
         // Create the undo button.
         let undo_button = Button::new(&mut self.undo_button_state, Text::new("Undo").size(70))
             .on_press(Message::Undo);
@@ -217,6 +227,7 @@ impl Application for Game {
         // Add the current player message to the bottom of the column
         column = column.push(current_player);
         column = column.push(undo_button);
+        column = column.push(reset_button);
 
         column.into()
     }
