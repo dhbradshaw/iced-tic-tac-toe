@@ -225,7 +225,6 @@ fn row<'a>(buttons: [Button<'a, Message>; 3]) -> Row<'a, Message> {
     let row_spacing = 2 * row_padding;
 
     let mut row = Row::new().padding(row_padding).spacing(row_spacing);
-
     for button in buttons.into_iter() {
         row = row.push(button);
     }
@@ -238,6 +237,7 @@ fn spot_element(
     index: u8,
     winner: bool,
 ) -> Button<Message> {
+    // Style depends on whether the spot is a winning spot or not.
     let size;
     let color;
     if winner {
@@ -248,6 +248,7 @@ fn spot_element(
         color = iced::Color::from_rgb(0.8, 0.8, 0.8);
     };
 
+    // Pick and style text
     let text = Text::new(spot_type.to_char().to_string())
         .height(Length::Fill)
         .width(Length::Fill)
@@ -255,6 +256,7 @@ fn spot_element(
         .vertical_alignment(iced::VerticalAlignment::Center)
         .size(size);
 
+    // Style the button
     Button::new(state, text)
         .style(ButtonColor { color })
         .on_press(Message::MoveMade(index))
