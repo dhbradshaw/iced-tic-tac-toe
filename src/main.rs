@@ -219,13 +219,18 @@ impl Application for Game {
 
         // Create the reset button.
         let reset_button = Button::new(&mut self.reset_button_state, Text::new("Reset").size(70))
-            .on_press(Message::Reset);
+            .on_press(Message::Reset)
+            .height(Length::Units(100))
+            .width(Length::Units(100));
 
         // Create the undo button.
         let svg = Svg::from_path(format!("{}/resources/undo.svg", env!("CARGO_MANIFEST_DIR")))
             .width(Length::Fill)
             .height(Length::Fill);
-        let undo_button = Button::new(&mut self.undo_button_state, svg).on_press(Message::Undo);
+        let undo_button = Button::new(&mut self.undo_button_state, svg)
+            .on_press(Message::Undo)
+            .height(Length::Units(100))
+            .width(Length::Units(100));
 
         // Add the current player message to the bottom of the column
         column = column.push(current_player);
