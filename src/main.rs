@@ -26,18 +26,18 @@ pub enum Message {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-enum SpotType {
+enum BoardCellType {
     Empty,
     X,
     O,
 }
 
-impl SpotType {
+impl BoardCellType {
     fn to_char(&self) -> char {
         match self {
-            SpotType::Empty => ' ',
-            SpotType::X => 'X',
-            SpotType::O => 'O',
+            BoardCellType::Empty => ' ',
+            BoardCellType::X => 'X',
+            BoardCellType::O => 'O',
         }
     }
 }
@@ -74,25 +74,25 @@ impl Game {
             undo_button_state: button::State::new(),
         }
     }
-    pub fn spots(&self) -> [SpotType; 9] {
-        let mut spots = [SpotType::Empty; 9];
+    pub fn board_cell_types(&self) -> [BoardCellType; 9] {
+        let mut cell_types = [BoardCellType::Empty; 9];
         let mut x = true;
         for n in &self.moves {
             if x {
-                spots[*n as usize] = SpotType::X;
+                cell_types[*n as usize] = BoardCellType::X;
             } else {
-                spots[*n as usize] = SpotType::O;
+                cell_types[*n as usize] = BoardCellType::O;
             }
             x = !x;
         }
-        spots
+        cell_types
     }
 
-    fn current_player(&self) -> SpotType {
+    fn current_player(&self) -> BoardCellType {
         if self.moves.len() % 2 == 0 {
-            SpotType::X
+            BoardCellType::X
         } else {
-            SpotType::O
+            BoardCellType::O
         }
     }
 
@@ -110,14 +110,17 @@ impl Game {
             [0, 4, 8],
             [2, 4, 6],
         ];
-        let spots = self.spots();
+        let cell_types = self.board_cell_types();
 
         let mut wins = vec![];
         for win in possible_wins {
-            let values = win.iter().map(|n| spots[*n as usize]).collect::<Vec<_>>();
-            if values.iter().all(|v| *v == SpotType::X) {
+            let values = win
+                .iter()
+                .map(|n| cell_types[*n as usize])
+                .collect::<Vec<_>>();
+            if values.iter().all(|v| *v == BoardCellType::X) {
                 wins.push(win);
-            } else if values.iter().all(|v| *v == SpotType::O) {
+            } else if values.iter().all(|v| *v == BoardCellType::O) {
                 wins.push(win);
             }
         }
@@ -200,17 +203,17 @@ impl Application for Game {
             .horizontal_alignment(iced::HorizontalAlignment::Center);
 
         // Get 2D array of buttons
-        let spots = self.spots();
-        let mut spot_elements = Vec::new();
+        let cell_types = self.board_cell_types();
+        let mut board_elements = Vec::new();
         for (i, state) in self.cell_button_states.iter_mut().enumerate() {
-            let spot_type = spots[i];
+            let cell_type = cell_types[i];
             let winning = winning_squares.contains(&(i as u8));
-            spot_elements.push(spot_element(state, spot_type, i as u8, winning));
+            board_elements.push(board_element(state, cell_type, i as u8, winning));
         }
-        let spot_elements = shape_2d(spot_elements, 3);
+        let board_elements = shape_2d(board_elements, 3);
 
         // Convert 2D array of buttons to a column of rows.
-        let rows = spot_elements.into_iter().map(|e| row(e));
+        let rows = board_elements.into_iter().map(|e| board_row(e));
         let mut column = Column::new()
             .padding(0)
             .spacing(0)
@@ -249,7 +252,7 @@ impl Application for Game {
     }
 }
 
-fn row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
+fn board_row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
     // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
     let row_padding = 5;
     // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
@@ -262,13 +265,13 @@ fn row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
     row.into()
 }
 
-fn spot_element(
+fn board_element(
     state: &mut button::State,
-    spot_type: SpotType,
+    cell_type: BoardCellType,
     index: u8,
     winner: bool,
 ) -> Button<Message> {
-    // Style depends on whether the spot is a winning spot or not.
+    // Style depends on whether the board_cell is a winning one or not.
     let size;
     let color;
     if winner {
@@ -280,7 +283,7 @@ fn spot_element(
     };
 
     // Pick and style text
-    let text = Text::new(spot_type.to_char().to_string())
+    let text = Text::new(cell_type.to_char().to_string())
         .height(Length::Fill)
         .width(Length::Fill)
         .horizontal_alignment(iced::HorizontalAlignment::Center)
