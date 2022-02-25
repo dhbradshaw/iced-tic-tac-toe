@@ -10,6 +10,7 @@ use iced::Element;
 use iced::Length;
 use iced::Row;
 use iced::Settings;
+use iced::Svg;
 use iced::Text;
 use iced_tic_tac_toe::shape_2d;
 
@@ -221,8 +222,10 @@ impl Application for Game {
             .on_press(Message::Reset);
 
         // Create the undo button.
-        let undo_button = Button::new(&mut self.undo_button_state, Text::new("Undo").size(70))
-            .on_press(Message::Undo);
+        let svg = Svg::from_path(format!("{}/resources/undo.svg", env!("CARGO_MANIFEST_DIR")))
+            .width(Length::Fill)
+            .height(Length::Fill);
+        let undo_button = Button::new(&mut self.undo_button_state, svg).on_press(Message::Undo);
 
         // Add the current player message to the bottom of the column
         column = column.push(current_player);
