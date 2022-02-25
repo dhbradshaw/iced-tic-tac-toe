@@ -188,14 +188,16 @@ impl Application for Game {
 
         // Create the current player message.
         let message = if winning_squares.is_empty() {
-            format!("{} next", self.current_player().to_char())
+            format!("{}\nnext", self.current_player().to_char())
         } else {
             format!(
-                "{} wins!",
+                "{}\nwins!",
                 if self.moves.len() % 2 == 0 { "O" } else { "X" }
             )
         };
-        let current_player = Text::new(message).size(70);
+        let current_player = Text::new(message)
+            .size(50)
+            .horizontal_alignment(iced::HorizontalAlignment::Center);
 
         // Get 2D array of buttons
         let spots = self.spots();
@@ -218,24 +220,30 @@ impl Application for Game {
         }
 
         // Create the reset button.
-        let reset_button = Button::new(&mut self.reset_button_state, Text::new("Reset").size(70))
+        let reset_svg =
+            Svg::from_path(format!("{}/resources/undo.svg", env!("CARGO_MANIFEST_DIR")));
+        let reset_button = Button::new(&mut self.reset_button_state, reset_svg)
             .on_press(Message::Reset)
             .height(Length::Units(100))
             .width(Length::Units(100));
 
         // Create the undo button.
-        let svg = Svg::from_path(format!("{}/resources/undo.svg", env!("CARGO_MANIFEST_DIR")))
+        let undo_svg = Svg::from_path(format!("{}/resources/back.svg", env!("CARGO_MANIFEST_DIR")))
             .width(Length::Fill)
             .height(Length::Fill);
-        let undo_button = Button::new(&mut self.undo_button_state, svg)
+        let undo_button = Button::new(&mut self.undo_button_state, undo_svg)
             .on_press(Message::Undo)
             .height(Length::Units(100))
             .width(Length::Units(100));
 
+        let management_row = Row::new()
+            .spacing(0)
+            .push(reset_button)
+            .push(current_player)
+            .push(undo_button);
+
         // Add the current player message to the bottom of the column
-        column = column.push(current_player);
-        column = column.push(undo_button);
-        column = column.push(reset_button);
+        column = column.push(management_row);
 
         column.into()
     }
