@@ -236,7 +236,7 @@ impl Application for Game {
         // Create the undo button.
         let undo_button = svg_button(
             &mut self.undo_button_state,
-            svg_from_file("back"),
+            svg_from_file("undo"),
             Message::Undo,
         );
 
