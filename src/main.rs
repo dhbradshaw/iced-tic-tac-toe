@@ -160,21 +160,10 @@ impl Application for Game {
     ) -> Command<Self::Message> {
         match _message {
             Message::MoveMade(move_) => {
-                let repeat = self.moves.contains(&move_);
-                let last = Some(&move_) == self.moves.last();
-                match (repeat, last) {
-                    (true, true) => {
-                        self.moves.pop();
-                    }
-                    (true, false) => {
-                        if !self.winning_lines().is_empty() {
-                            self.moves.clear();
-                        }
-                    }
-                    (false, _) => {
-                        self.moves.push(move_);
-                    }
+                if self.moves.contains(&move_) {
+                    return Command::none();
                 }
+                self.moves.push(move_);
             }
             Message::Undo => {
                 self.moves.pop();
