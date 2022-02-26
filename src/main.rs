@@ -149,6 +149,16 @@ impl Game {
         }
         None
     }
+
+    fn message(&self) -> String {
+        if let Some(winner) = self.winner() {
+            format!("{} wins!", winner.to_char())
+        } else if self.moves.len() == 9 {
+            "It's a draw!".to_string()
+        } else {
+            format!("{} to play", self.current_player().to_char())
+        }
+    }
 }
 
 impl Application for Game {
@@ -191,16 +201,7 @@ impl Application for Game {
     fn view(&mut self) -> Element<Self::Message> {
         let winning_squares = self.winning_squares();
 
-        // Create the current player message.
-        let message = if winning_squares.is_empty() {
-            format!("{}\nnext", self.current_player().to_char())
-        } else {
-            format!(
-                "{}\nwins!",
-                if self.moves.len() % 2 == 0 { "O" } else { "X" }
-            )
-        };
-        let current_player = Text::new(message)
+        let current_player = Text::new(self.message())
             .size(50)
             .horizontal_alignment(iced::HorizontalAlignment::Center);
 
