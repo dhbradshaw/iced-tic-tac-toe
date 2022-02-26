@@ -74,6 +74,7 @@ impl Game {
             undo_button_state: button::State::new(),
         }
     }
+
     pub fn board_cell_types(&self) -> [BoardCellType; 9] {
         let mut cell_types = [BoardCellType::Empty; 9];
         let mut x = true;
@@ -226,17 +227,14 @@ impl Application for Game {
         }
 
         // Create the reset button.
-        let reset_svg =
-            Svg::from_path(format!("{}/resources/undo.svg", env!("CARGO_MANIFEST_DIR")));
+        let reset_svg = svg_from_file("undo");
         let reset_button = Button::new(&mut self.reset_button_state, reset_svg)
             .on_press(Message::Reset)
             .height(Length::Units(100))
             .width(Length::Units(100));
 
         // Create the undo button.
-        let undo_svg = Svg::from_path(format!("{}/resources/back.svg", env!("CARGO_MANIFEST_DIR")))
-            .width(Length::Fill)
-            .height(Length::Fill);
+        let undo_svg = svg_from_file("back");
         let undo_button = Button::new(&mut self.undo_button_state, undo_svg)
             .on_press(Message::Undo)
             .height(Length::Units(100))
@@ -253,6 +251,21 @@ impl Application for Game {
 
         column.into()
     }
+}
+
+fn svg_from_file(name: &str) -> Svg {
+    Svg::from_path(format!(
+        "{}/resources/{}.svg",
+        env!("CARGO_MANIFEST_DIR"),
+        name
+    ))
+}
+
+fn svg_button(state: &mut button::State, svg: Svg, message: Message) -> Button<Message> {
+    Button::new(state, svg)
+        .on_press(message)
+        .height(Length::Units(100))
+        .width(Length::Units(100))
 }
 
 fn board_row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
