@@ -163,7 +163,9 @@ impl Application for Game {
                 if self.moves.contains(&move_) {
                     return Command::none();
                 }
-                self.moves.push(move_);
+                if self.winning_lines().is_empty() {
+                    self.moves.push(move_);
+                }
             }
             Message::Undo => {
                 self.moves.pop();
