@@ -138,6 +138,17 @@ impl Game {
         }
         squares
     }
+
+    fn winner(&self) -> Option<BoardCellType> {
+        let cell_types = self.board_cell_types();
+        for win in self.winning_lines() {
+            for value in win {
+                let cell_type = cell_types[value as usize];
+                return Some(cell_type);
+            }
+        }
+        None
+    }
 }
 
 impl Application for Game {
