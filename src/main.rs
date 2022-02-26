@@ -6,6 +6,7 @@ use iced::Button;
 use iced::Clipboard;
 use iced::Column;
 use iced::Command;
+use iced::Container;
 use iced::Element;
 use iced::Length;
 use iced::Row;
@@ -232,30 +233,30 @@ impl Application for Game {
             column = column.push(row);
         }
 
-        // Create the reset button.
+        // Add management row.
         let reset_button = svg_button(
             &mut self.reset_button_state,
             svg_from_file("reset"),
             Message::Reset,
         );
-
-        // Create the undo button.
         let undo_button = svg_button(
             &mut self.undo_button_state,
             svg_from_file("undo"),
             Message::Undo,
         );
-
         let management_row = Row::new()
             .spacing(0)
             .push(reset_button)
             .push(current_player)
             .push(undo_button);
-
-        // Add the current player message to the bottom of the column
         column = column.push(management_row);
 
-        column.into()
+        Container::new(column)
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .center_x()
+            .center_y()
+            .into()
     }
 }
 
