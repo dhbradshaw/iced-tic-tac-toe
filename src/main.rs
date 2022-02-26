@@ -162,6 +162,8 @@ impl Game {
     }
 }
 
+const BASE_SIZE: u16 = 10;
+
 impl Application for Game {
     type Executor = executor::Default;
     type Message = Message;
@@ -200,9 +202,13 @@ impl Application for Game {
     }
 
     fn view(&mut self) -> Element<Self::Message> {
-        let current_player = Text::new(self.message())
-            .size(50)
-            .horizontal_alignment(iced::HorizontalAlignment::Center);
+        // Title and message at start of collumn
+        let mut column = Column::new()
+            .padding(0)
+            .spacing(0)
+            .align_items(Align::Center)
+            .push(Text::new("Tic Tac Toe").size(BASE_SIZE * 10))
+            .push(Text::new(self.message()).size(BASE_SIZE * 8));
 
         // Get 2D array of buttons
         let winning_squares = self.winning_squares();
@@ -225,10 +231,6 @@ impl Application for Game {
 
         // Convert 2D array of buttons to a column of rows.
         let rows = board_elements.into_iter().map(|e| board_row(e));
-        let mut column = Column::new()
-            .padding(0)
-            .spacing(0)
-            .align_items(Align::Center);
         for row in rows.into_iter() {
             column = column.push(row);
         }
@@ -244,11 +246,7 @@ impl Application for Game {
             svg_from_file("undo"),
             Message::Undo,
         );
-        let management_row = Row::new()
-            .spacing(0)
-            .push(reset_button)
-            .push(current_player)
-            .push(undo_button);
+        let management_row = board_row(vec![reset_button, undo_button]);
         column = column.push(management_row);
 
         Container::new(column)
@@ -271,13 +269,13 @@ fn svg_from_file(name: &str) -> Svg {
 fn svg_button(state: &mut button::State, svg: Svg, message: Message) -> Button<Message> {
     Button::new(state, svg)
         .on_press(message)
-        .height(Length::Units(100))
-        .width(Length::Units(100))
+        .height(Length::Units(BASE_SIZE * 20))
+        .width(Length::Units(BASE_SIZE * 20))
 }
 
 fn board_row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
     // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
-    let row_padding = 5;
+    let row_padding = BASE_SIZE;
     // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
     let row_spacing = 2 * row_padding;
 
@@ -298,10 +296,10 @@ fn board_element(
     let size;
     let color;
     if winner {
-        size = 90;
+        size = BASE_SIZE * 18;
         color = iced::Color::from_rgb(0.5, 0.5, 0.5);
     } else {
-        size = 80;
+        size = BASE_SIZE * 16;
         color = iced::Color::from_rgb(0.8, 0.8, 0.8);
     };
 
@@ -317,7 +315,7 @@ fn board_element(
     Button::new(state, text)
         .style(ButtonColor { color })
         .on_press(Message::MoveMade(index))
-        .padding(10)
-        .height(Length::Units(100))
-        .width(Length::Units(100))
+        .padding(BASE_SIZE * 2)
+        .height(Length::Units(BASE_SIZE * 20))
+        .width(Length::Units(BASE_SIZE * 20))
 }
