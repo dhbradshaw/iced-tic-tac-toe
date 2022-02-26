@@ -12,7 +12,6 @@ use iced::Row;
 use iced::Settings;
 use iced::Svg;
 use iced::Text;
-use iced_tic_tac_toe::shape_2d;
 
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
@@ -200,21 +199,28 @@ impl Application for Game {
     }
 
     fn view(&mut self) -> Element<Self::Message> {
-        let winning_squares = self.winning_squares();
-
         let current_player = Text::new(self.message())
             .size(50)
             .horizontal_alignment(iced::HorizontalAlignment::Center);
 
         // Get 2D array of buttons
+        let winning_squares = self.winning_squares();
         let cell_types = self.board_cell_types();
         let mut board_elements = Vec::new();
+        let mut row_elements = Vec::new();
+        let column_count = 3;
         for (i, state) in self.cell_button_states.iter_mut().enumerate() {
             let cell_type = cell_types[i];
             let winning = winning_squares.contains(&(i as u8));
-            board_elements.push(board_element(state, cell_type, i as u8, winning));
+            row_elements.push(board_element(state, cell_type, i as u8, winning));
+            if i % column_count == column_count - 1 {
+                board_elements.push(row_elements);
+                row_elements = Vec::new();
+            }
         }
-        let board_elements = shape_2d(board_elements, 3);
+        if !row_elements.is_empty() {
+            board_elements.push(row_elements);
+        }
 
         // Convert 2D array of buttons to a column of rows.
         let rows = board_elements.into_iter().map(|e| board_row(e));
