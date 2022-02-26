@@ -229,7 +229,7 @@ impl Application for Game {
         // Create the reset button.
         let reset_button = svg_button(
             &mut self.reset_button_state,
-            svg_from_file("undo"),
+            svg_from_file("reset"),
             Message::Reset,
         );
 
