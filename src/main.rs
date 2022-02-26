@@ -227,18 +227,18 @@ impl Application for Game {
         }
 
         // Create the reset button.
-        let reset_svg = svg_from_file("undo");
-        let reset_button = Button::new(&mut self.reset_button_state, reset_svg)
-            .on_press(Message::Reset)
-            .height(Length::Units(100))
-            .width(Length::Units(100));
+        let reset_button = svg_button(
+            &mut self.reset_button_state,
+            svg_from_file("undo"),
+            Message::Reset,
+        );
 
         // Create the undo button.
-        let undo_svg = svg_from_file("back");
-        let undo_button = Button::new(&mut self.undo_button_state, undo_svg)
-            .on_press(Message::Undo)
-            .height(Length::Units(100))
-            .width(Length::Units(100));
+        let undo_button = svg_button(
+            &mut self.undo_button_state,
+            svg_from_file("back"),
+            Message::Undo,
+        );
 
         let management_row = Row::new()
             .spacing(0)
