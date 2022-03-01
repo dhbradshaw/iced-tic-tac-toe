@@ -121,9 +121,9 @@ impl Game {
                 .iter()
                 .map(|n| cell_types[*n as usize])
                 .collect::<Vec<_>>();
-            if values.iter().all(|v| *v == BoardCellType::X) {
-                wins.push(win);
-            } else if values.iter().all(|v| *v == BoardCellType::O) {
+            if values.iter().all(|v| *v == BoardCellType::X)
+                || values.iter().all(|v| *v == BoardCellType::O)
+            {
                 wins.push(win);
             }
         }
