@@ -230,7 +230,7 @@ impl Application for Game {
         }
 
         // Convert 2D array of buttons to a column of rows.
-        let rows = board_elements.into_iter().map(|e| board_row(e));
+        let rows = board_elements.into_iter().map(board_row);
         for row in rows {
             column = column.push(row);
         }
