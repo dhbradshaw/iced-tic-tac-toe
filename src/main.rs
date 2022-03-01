@@ -35,7 +35,7 @@ enum BoardCellType {
 }
 
 impl BoardCellType {
-    fn to_char(&self) -> char {
+    fn char(&self) -> char {
         match self {
             BoardCellType::Empty => ' ',
             BoardCellType::X => 'X',
@@ -154,11 +154,11 @@ impl Game {
 
     fn message(&self) -> String {
         if let Some(winner) = self.winner() {
-            format!("{} wins!", winner.to_char())
+            format!("{} wins!", winner.char())
         } else if self.moves.len() == 9 {
             "It's a draw!".to_string()
         } else {
-            format!("{} to play", self.current_player().to_char())
+            format!("{} to play", self.current_player().char())
         }
     }
 }
@@ -303,7 +303,7 @@ fn board_element(
     };
 
     // Pick and style text
-    let text = Text::new(cell_type.to_char().to_string())
+    let text = Text::new(cell_type.char().to_string())
         .height(Length::Fill)
         .width(Length::Fill)
         .horizontal_alignment(iced::HorizontalAlignment::Center)
