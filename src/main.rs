@@ -143,11 +143,10 @@ impl Game {
     }
 
     fn winner(&self) -> Option<BoardCellType> {
-        let cell_types = self.board_cell_types();
-        for win in self.winning_lines() {
-            for value in win {
-                let cell_type = cell_types[value as usize];
-                return Some(cell_type);
+        if let Some(win) = self.winning_lines().first() {
+            if let Some(value) = win.first() {
+                let cell_types = self.board_cell_types();
+                return Some(cell_types[*value as usize]);
             }
         }
         None
