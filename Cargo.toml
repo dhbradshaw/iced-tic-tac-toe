@@ -2,6 +2,7 @@
 description = "Try out iced by making a simple game of tic tac toe."
 documentation = "https://docs.rs/iced-tic-tac-toe"
 edition = "2021"
+license = "MIT"
 name = "iced-tic-tac-toe"
 repository = "https://github.com/dhbradshaw/iced-tic-tac-toe"
 version = "0.1.0"
