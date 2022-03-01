@@ -273,7 +273,7 @@ fn svg_button(state: &mut button::State, svg: Svg, message: Message) -> Button<M
         .width(Length::Units(BASE_SIZE * 20))
 }
 
-fn board_row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
+fn board_row(buttons: Vec<Button<Message>>) -> Row<Message> {
     // padding works above and below a row, so it doubles up between rows.  It controls vertical spacing.
     let row_padding = BASE_SIZE;
     // spacing works between row elements, so it does not double up.  It controls horizontal spacing.
