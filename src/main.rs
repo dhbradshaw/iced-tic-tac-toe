@@ -14,6 +14,8 @@ use iced::Settings;
 use iced::Svg;
 use iced::Text;
 
+const BASE_SIZE: u16 = 6;
+
 pub fn main() -> iced::Result {
     Game::run(Settings::default())
 }
@@ -161,8 +163,6 @@ impl Game {
         }
     }
 }
-
-const BASE_SIZE: u16 = 10;
 
 impl Application for Game {
     type Executor = executor::Default;
