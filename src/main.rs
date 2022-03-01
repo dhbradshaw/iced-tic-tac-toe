@@ -283,7 +283,7 @@ fn board_row<'a>(buttons: Vec<Button<'a, Message>>) -> Row<'a, Message> {
     for button in buttons.into_iter() {
         row = row.push(button);
     }
-    row.into()
+    row
 }
 
 fn board_element(
